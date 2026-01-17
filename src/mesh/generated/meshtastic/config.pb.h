@@ -260,7 +260,7 @@ typedef enum _meshtastic_Config_LoRaConfig_RegionCode {
     meshtastic_Config_LoRaConfig_RegionCode_TH = 12,
     /* WLAN Band */
     meshtastic_Config_LoRaConfig_RegionCode_LORA_24 = 13,
-    /* Ukraine 433mhz */
+    /* Ukraine 433 but magical */
     meshtastic_Config_LoRaConfig_RegionCode_UA_433 = 14,
     /* Ukraine 868mhz */
     meshtastic_Config_LoRaConfig_RegionCode_UA_868 = 15,
