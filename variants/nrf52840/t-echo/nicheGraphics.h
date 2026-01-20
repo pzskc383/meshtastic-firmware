@@ -16,6 +16,7 @@
 #include "graphics/niche/InkHUD/Applets/User/Positions/PositionsApplet.h"
 #include "graphics/niche/InkHUD/Applets/User/RecentsList/RecentsListApplet.h"
 #include "graphics/niche/InkHUD/Applets/User/ThreadedMessage/ThreadedMessageApplet.h"
+#include "graphics/niche/InkHUD/Applets/User/Ukraine/UkraineApplet.h"
 
 // Shared NicheGraphics components
 // --------------------------------
@@ -79,7 +80,7 @@ void setupNicheGraphics()
     inkhud->addApplet("DMs", new InkHUD::DMApplet);                              // -
     inkhud->addApplet("Channel 0", new InkHUD::ThreadedMessageApplet(0));        // -
     inkhud->addApplet("Channel 1", new InkHUD::ThreadedMessageApplet(1));        // -
-    inkhud->addApplet("Positions", new InkHUD::PositionsApplet, true);           // Activated
+    inkhud->addApplet("Ukraine", new InkHUD::UkraineApplet, true, true);         // Activated, autoshown
     inkhud->addApplet("Favorites Map", new InkHUD::FavoritesMapApplet);          // -
     inkhud->addApplet("Recents List", new InkHUD::RecentsListApplet);            // -
     inkhud->addApplet("Heard", new InkHUD::HeardApplet, true, false, 0);         // Activated, no autoshow, default on tile 0
