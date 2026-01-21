@@ -57,7 +57,9 @@ void InkHUD::LogoApplet::onRender(bool full)
     // Only show the custom screen at startup
     // This allows us to draw the usual Meshtastic logo at shutdown
     // The effect is similar to the two-stage userPrefs boot screen used by BaseUI
-    if (millis() < 10 * 1000UL) {
+    // ^
+    // | i don't like it
+    if (true) {
 
         // Draw the custom logo
         const uint8_t logo[] = USERPREFS_OEM_IMAGE_DATA;
