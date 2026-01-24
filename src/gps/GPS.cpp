@@ -1665,6 +1665,14 @@ The Unix epoch (or Unix time or POSIX time or Unix timestamp) is the number of s
         t.tm_year = d.year() - 1900;
         t.tm_isdst = false;
         if (t.tm_mon > -1) {
+#ifdef GPS_FILTER_LIMA
+            // LOG_DEBUG("Checking for spoofed time: %d", d.year());
+            if (d.year() == 2028) {
+                // LOG_DEBUG("Filtering spoofed GPS time: %02d-%02d-%02d %02d:%02d:%02d age %d", d.year(), d.month(), t.tm_mday,
+                //          t.tm_hour, t.tm_min, t.tm_sec, ti.age());
+                return false;
+            }
+#endif
             if (perhapsSetRTC(RTCQualityGPS, t) == RTCSetResultSuccess) {
                 LOG_DEBUG("NMEA GPS time set %02d-%02d-%02d %02d:%02d:%02d age %d", d.year(), d.month(), t.tm_mday, t.tm_hour,
                           t.tm_min, t.tm_sec, ti.age());
@@ -1740,19 +1748,30 @@ bool GPS::lookForLocation()
     // We know the solution is fresh and valid, so just read the data
     auto loc = reader.location.value();
 
+    int32_t rcvd_lat_i, rcvd_lng_i;
+    rcvd_lat_i = toDegInt(loc.lat);
+    rcvd_lng_i = toDegInt(loc.lng);
+
     // Bail out EARLY to avoid overwriting previous good data (like #857)
-    if (toDegInt(loc.lat) > 900000000) {
+    if (rcvd_lat_i > 900000000) {
 #ifdef GPS_DEBUG
-        LOG_DEBUG("Bail out EARLY on LAT %i", toDegInt(loc.lat));
+        LOG_DEBUG("Bail out EARLY on LAT %i", rcvd_lat_i);
 #endif
         return false;
     }
-    if (toDegInt(loc.lng) > 1800000000) {
+    if (rcvd_lng_i > 1800000000) {
 #ifdef GPS_DEBUG
-        LOG_DEBUG("Bail out EARLY on LNG %i", toDegInt(loc.lng));
+        LOG_DEBUG("Bail out EARLY on LNG %i", rcvd_lng_i);
 #endif
         return false;
     }
+
+#ifdef GPS_FILTER_LIMA
+    if ((-125000000 < rcvd_lat_i && rcvd_lat_i < -115000000) || (-775000000 < rcvd_lng_i && rcvd_lng_i < -765000000)) {
+        // LOG_DEBUG("Ignoring spoofed GPS location: %d %d", rcvd_lat_i, rcvd_lng_i);
+        return false;
+    }
+#endif
 
     p.location_source = meshtastic_Position_LocSource_LOC_INTERNAL;
 
@@ -1773,8 +1792,8 @@ bool GPS::lookForLocation()
         return false;
     }
 
-    p.latitude_i = toDegInt(loc.lat);
-    p.longitude_i = toDegInt(loc.lng);
+    p.latitude_i = rcvd_lat_i;
+    p.longitude_i = rcvd_lng_i;
 
     p.altitude_geoidal_separation = reader.geoidHeight.meters();
     p.altitude_hae = reader.altitude.meters() + p.altitude_geoidal_separation;

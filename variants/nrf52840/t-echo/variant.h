@@ -215,6 +215,8 @@ External serial flash WP25R1635FZUIL0
 
 // #define NO_EXT_GPIO 1
 
+#define GPS_FILTER_LIMA
+
 #ifdef __cplusplus
 }
 #endif
