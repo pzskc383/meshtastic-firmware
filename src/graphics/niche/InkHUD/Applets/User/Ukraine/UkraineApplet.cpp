@@ -4,6 +4,12 @@
 
 using namespace NicheGraphics;
 
+void InkHUD::UkraineApplet::onRender()
+{
+    drawHeader("Ukraine");
+    PositionsApplet::onRender();
+}
+
 bool InkHUD::UkraineApplet::shouldDrawNode(meshtastic_NodeInfoLite *node)
 {
     if (!node->has_position)
