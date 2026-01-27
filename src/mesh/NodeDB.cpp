@@ -2113,7 +2113,13 @@ meshtastic_NodeInfoLite *NodeDB::getOrCreateMeshNode(NodeNum n)
 /// valid lat/lon
 bool NodeDB::hasValidPosition(const meshtastic_NodeInfoLite *n)
 {
-    return n->has_position && (n->position.latitude_i != 0 || n->position.longitude_i != 0);
+    return n->has_position && (n->position.latitude_i != 0 || n->position.longitude_i != 0)
+#ifndef GPS_FILTER_LIMA
+        ;
+#else
+           && !(25000000 < n->position.latitude_i && n->position.latitude_i < -115000000) &&
+           !(-775000000 < n->position.longitude_i && n->position.longitude_i < -765000000);
+#endif
 }
 
 /// If we have a node / user and they report is_licensed = true
