@@ -255,6 +255,15 @@ External serial flash WP25R1635FZUIL0
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00                                                           \
     }
 
+#define MAX_NUM_NODES 120
+#define MAX_MQTT_QUEUE 32
+
+#define RADIOLIB_DEBUG 1
+#define DEBUG_HEAP 1
+
+#define MESHTASTIC_EXCLUDE_REPLYBOT 0
+#define MESHTASTIC_EXCLUDE_STATUS 0
+
 #define GPS_FILTER_LIMA
 
 #ifdef __cplusplus
