@@ -1766,13 +1766,6 @@ bool GPS::lookForLocation()
         return false;
     }
 
-#ifdef GPS_FILTER_LIMA
-    if ((-125000000 < rcvd_lat_i && rcvd_lat_i < -115000000) || (-775000000 < rcvd_lng_i && rcvd_lng_i < -765000000)) {
-        // LOG_DEBUG("Ignoring spoofed GPS location: %d %d", rcvd_lat_i, rcvd_lng_i);
-        return false;
-    }
-#endif
-
     p.location_source = meshtastic_Position_LocSource_LOC_INTERNAL;
 
     // Dilution of precision (an accuracy metric) is reported in 10^2 units, so we need to scale down when we use it
@@ -1838,6 +1831,17 @@ bool GPS::lookForLocation()
 
 bool GPS::hasLock()
 {
+#ifdef GPS_FILTER_LIMA
+    if (fixQual >= 1 && reader.location.isValid()) {
+        auto loc = reader.location.value();
+        // Lima spoofing: ~12°S, 77°W
+        if (loc.lat.negative && (loc.lat.deg >= 11 && loc.lat.deg <= 12) && loc.lng.negative &&
+            (loc.lng.deg >= 76 && loc.lng.deg <= 77)) {
+            LOG_WARN("GPS spoofing detected, ignoring");
+            return true; // Same as "no data received" - we have lock, just a bad one.
+        }
+    }
+#endif
     // Using GPGGA fix quality indicator
     if (fixQual >= 1 && fixQual <= 5) {
 #ifndef TINYGPS_OPTION_NO_CUSTOM_FIELDS
