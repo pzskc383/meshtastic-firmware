@@ -15,7 +15,7 @@ namespace NicheGraphics::InkHUD
 class UkraineApplet : public PositionsApplet
 {
   public:
-    void onRender();
+    void onRender(bool full);
     // virtual void getMapCenter(float *lat, float *lng);
     // virtual void getMapSize(uint32_t *widthMeters, uint32_t *heightMeters)
   protected:
