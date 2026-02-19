@@ -143,6 +143,10 @@ typedef enum _meshtastic_PortNum {
     /* Reticulum Network Stack Tunnel App
  ENCODING: Fragmented RNS Packet. Handled by Meshtastic RNS interface */
     meshtastic_PortNum_RETICULUM_TUNNEL_APP = 76,
+    /* Image message application for LoRa fax protocol
+ Payload is an BitmapPayload message.
+ ENCODING: Protobuf */
+    meshtastic_PortNum_MESHFAX_APP = 78,
     /* App for transporting Cayenne Low Power Payload, popular for LoRaWAN sensor nodes. Offers ability to send
  arbitrary telemetry over meshtastic that is not covered by telemetry.proto
  ENCODING: CayenneLLP */
