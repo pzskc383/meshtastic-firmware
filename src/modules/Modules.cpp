@@ -97,6 +97,8 @@
 #include "modules/StatusMessageModule.h"
 #endif
 
+#include "TeleprinterModule.h"
+
 #if defined(HAS_HARDWARE_WATCHDOG)
 #include "watchdog/watchdogThread.h"
 #endif
@@ -159,6 +161,10 @@ void setupModules()
 #if !MESHTASTIC_EXCLUDE_STATUS
     statusMessageModule = new StatusMessageModule();
 #endif
+
+    // Teleprinter module for bitmap image messages (MESHFAX_APP)
+    teleprinterModule = new TeleprinterModule();
+
 #if !MESHTASTIC_EXCLUDE_GENERIC_THREAD_MODULE
     new GenericThreadModule();
 #endif
